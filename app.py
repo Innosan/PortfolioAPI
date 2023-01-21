@@ -1,7 +1,9 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, render_template, g
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from markupsafe import Markup
+
+from db.db_connect import query_db
 
 app = Flask(__name__)
 app.app_context().push()
@@ -14,46 +16,40 @@ def make_svg(file_url):
     return render_template('test.html', svg=Markup(svg))
 
 
-projects = {
-    '1': {
-        'title': "Figma React",
-        'description': "Comprehensive collection of little projects based on React, starring: Weather App, "
-                       "Emoji Search App, Harry Potter char search app and much more!",
-        'dateCreated': "September 23, 2021",
-        'mainLanguage': "JavaScript",
-        'tagIcons': {
-            '1': make_svg("static/TagIcons/JavaScript.svg"),
-            '2': make_svg("static/TagIcons/Kotlin.svg"),
-        }
-    },
-    '2': {
-        'title': "Daily Routine",
-        'description': "Simple ToDo app with registration and authorization, based on React and Redux for state "
-                       "management!",
-        'dateCreated': "April 23, 2022",
-        'mainLanguage': "JavaScript",
-        'tagIcons': {
-            '1': make_svg("static/TagIcons/JavaScript.svg"),
-        }
-    },
-    '3': {
-        'title': "This Site",
-        'description': "Yep, this site is also a pet project, based on beautiful Svelte!",
-        'dateCreated': "January 18, 2023",
-        'mainLanguage': "TypeScript",
-        'tagIcons': {
-            '1': make_svg("static/TagIcons/TypeScript.svg")
-        }
-    }
-}
-
-
+# API Methods ------------
 class Project(Resource):
+
     def get(self):
-        return jsonify(projects)
+        my_projects = query_db('select * from project')
+
+        # Transforming string with indexes of Icons
+        # into actual array of indexes
+        for project in my_projects:
+            tags = project['tags'].split(', ')
+            project['tags'] = tags
+
+            i = 0
+            # Getting icons and transforming
+            # path to the file to SVG tags
+            while i < len(project['tags']):
+                project['tags'][i] = query_db('select * from tag where id = {}'.format(i + 1), one=True)
+                project['tags'][i]['path'] = make_svg(project['tags'][i]['path'])
+                i += 1
+
+        return my_projects
 
 
+# API Endpoints ------------
 api.add_resource(Project, "/api/projects")
+
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+
+    if db is not None:
+        db.close()
+
 
 if __name__ == '__main__':
     app.run()
