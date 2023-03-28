@@ -40,7 +40,11 @@ class Project(Resource):
 
 
 # API Endpoints ------------
-api.add_resource(Project, "/api/projects")
+api.add_resource(Project, "/projects")
+
+@app.route('/')
+def index():
+    return render_template(main.html)
 
 
 @app.teardown_appcontext

@@ -2,7 +2,7 @@ from flask import g
 
 import sqlite3
 
-DATABASE = 'db/portfolio.db'
+DATABASE = '/home/Innosan/mysite/db/portfolio.db'
 
 
 def get_db():
