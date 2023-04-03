@@ -33,7 +33,7 @@ class Project(Resource):
             # Getting icons and transforming
             # path to the file to SVG tags
             while i < len(project['tags']):
-                project['tags'][i] = query_db('select * from tag where id = {}'.format(i + 1), one=True)
+                project['tags'][i] = query_db('select * from tag where id = {}'.format(project['tags'][i]), one=True)
                 project['tags'][i]['path'] = make_svg(project['tags'][i]['path'])
                 i += 1
 
