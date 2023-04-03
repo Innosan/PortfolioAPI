@@ -20,6 +20,18 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/emojis')
+def emojis():
+    with open('static/emojis.json', encoding="utf-8") as file:
+        return json.load(file)
+
+
+@app.route('/harry-potter')
+def harry_potter():
+    with open('static/harry.json', encoding="utf-8") as file:
+        return json.load(file)
+
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)

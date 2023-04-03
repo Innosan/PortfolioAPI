@@ -1,0 +1,103 @@
+@font-face {
+    src: url("../font/SplineSansMono-VariableFont_wght.ttf");
+    font-family: Spline;
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: black; }
+}
+
+@keyframes detyping {
+    0% {
+        width: 100%;
+    }
+
+    100% {
+        width: 0;
+
+    }
+}
+@keyframes typing {
+    0% {
+        width: 0;
+        text-decoration: underline;
+    }
+
+    100% {
+        width: 100%;
+        text-decoration: underline;
+    }
+}
+
+html {
+    font-family: Spline, monospace;
+
+    height: 100%;
+}
+
+h1 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+ul {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    width: fit-content;
+
+    transition: .3s;
+}
+
+li {
+    width: fit-content;
+    list-style: none;
+    margin: 0 20px;
+    padding: 0;
+}
+
+ul li a {
+    font-size: 2em;
+    position: relative;
+    color: #eee;
+    text-decoration: none;
+}
+
+ul li a:before {
+    overflow: hidden;
+
+    position: absolute;
+    top: 0;
+
+    content: attr(data-text);
+
+    color: rgba(0, 0, 0, 0.8);
+
+    white-space: nowrap;
+}
+
+ul:hover li a:before {
+    animation: detyping .5s steps(40) forwards, blink-caret .75s step-end infinite;
+}
+
+ul li:hover a:before {
+    animation: typing .5s steps(10) forwards, blink-caret .75s step-end infinite;
+
+    padding-right: .2em;
+    border-right: .10em solid black;
+}
+
