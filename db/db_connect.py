@@ -2,14 +2,16 @@ from flask import g
 
 import sqlite3
 
+HOSTING_DATABASE = '/home/Innosan/mysite/db/portfolio.db'
 DATABASE = 'db/portfolio.db'
 
 
 def get_db():
     db = getattr(g, '_database', None)
 
+    # Change to DATABASE while local development
     if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
+        db = g._database = sqlite3.connect(HOSTING_DATABASE)
 
     def make_dicts(cursor, row):
         return dict((cursor.description[idx][0], value)
