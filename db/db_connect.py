@@ -11,7 +11,7 @@ def get_db():
 
     # Change to DATABASE while local development
     if db is None:
-        db = g._database = sqlite3.connect(HOSTING_DATABASE)
+        db = g._database = sqlite3.connect(DATABASE)
 
     def make_dicts(cursor, row):
         return dict((cursor.description[idx][0], value)

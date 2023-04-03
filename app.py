@@ -23,13 +23,13 @@ def index():
 @app.route('/emojis')
 def emojis():
     with open('static/emojis.json', encoding="utf-8") as file:
-        return json.load(file)
+        return jsonify(json.load(file))
 
 
 @app.route('/harry-potter')
 def harry_potter():
     with open('static/harry.json', encoding="utf-8") as file:
-        return json.load(file)
+        return jsonify(json.load(file))
 
 
 @app.teardown_appcontext
